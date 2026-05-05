@@ -4,12 +4,14 @@
 import json
 
 def load_data(file_path):
-    with open(file_path, "r") as handle:
+    with open(file_path, "r", encoding="utf-8") as handle:
         return json.load(handle)
 
 animals_data = load_data("animals_data.json")
 #print(animals_data)
 
+# HTML-String für die Tierkarten aufbauen
+output = ""
 for animal in animals_data:
     name = animal.get("name")
     characteristics = animal.get("characteristics", {})
@@ -19,11 +21,13 @@ for animal in animals_data:
     animal_type = characteristics.get("type")
 
     if name:
-        print(f"Name: {name}")
+        output += f"Name: {name}\n"
     if diet:
-        print(f"Diet: {diet}")
+        output += f"Diet: {diet}\n"
     if location:
-        print(f"Location: {location}")
+        output += f"Location: {location}\n"
     if animal_type:
-        print(f"Type: {animal_type}")
-    print()
+        output += f"Type: {animal_type}\n"
+    output += "\n"
+
+print(output)
