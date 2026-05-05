@@ -21,16 +21,16 @@ for animal in animals_data:
     animal_type      = characteristics.get("type")
 
     output += '          <li class="cards__item">\n'
-    output += '            <div class="card__text">\n'
     if name:
-        output += f'              <div class="card__title">{name}</div>\n'
+        output += f'            <div class="card__title">{name}</div>\n'
+    output += '            <p class="card__text">\n'
     if diet:
-        output += f"              <p>Diet: {diet}</p>\n"
+        output += f"                <strong>Diet:</strong> {diet}<br/>\n"
     if location:
-        output += f"              <p>Location: {location}</p>\n"
+        output += f"                <strong>Location:</strong> {location}<br/>\n"
     if animal_type:
-        output += f"              <p>Type: {animal_type}</p>\n"
-    output += "            </div>\n"
+        output += f"                <strong>Type:</strong> {animal_type}<br/>\n"
+    output += "            </p>\n"
     output += "          </li>\n"
 
 print(output)
