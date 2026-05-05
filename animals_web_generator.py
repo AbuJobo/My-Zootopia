@@ -1,16 +1,29 @@
-# This is a sample Python script.
+# Zootopia - Codio Git Aufgabe
+# Alexander Bormann
 
-# Press ⌃R to execute it or replace it with your code.
-# Press Double ⇧ to search everywhere for classes, files, tool windows, actions, and settings.
+import json
 
+def load_data(file_path):
+    with open(file_path, "r") as handle:
+        return json.load(handle)
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press ⌘F8 to toggle the breakpoint.
+animals_data = load_data("animals_data.json")
+#print(animals_data)
 
+for animal in animals_data:
+    name = animal.get("name")
+    characteristics = animal.get("characteristics", {})
+    diet = characteristics.get("diet")
+    locations = animal.get("locations", [])
+    location = locations[0] if locations else None
+    animal_type = characteristics.get("type")
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    if name:
+        print(f"Name: {name}")
+    if diet:
+        print(f"Diet: {diet}")
+    if location:
+        print(f"Location: {location}")
+    if animal_type:
+        print(f"Type: {animal_type}")
+    print()
