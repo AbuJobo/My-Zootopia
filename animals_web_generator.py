@@ -1,14 +1,25 @@
 # Zootopia - Codio Git Aufgabe
 # Alexander Bormann
-#
 
-import json
+import requests
 
-def load_data(file_path):
-    with open(file_path, "r", encoding="utf-8") as handle:
-        return json.load(handle)
+API_URL = "https://api.api-ninjas.com/v1/animals"
+API_KEY = "ciBBT43nMOeo5QDAnJeFo91mLNeReqlVSvtsAblX"
 
-animals_data = load_data("animals_data.json")
+
+def fetch_animals(animal_name):
+    response = requests.get(
+        API_URL,
+        headers={"X-Api-Key": API_KEY},
+        params={"name": animal_name},
+        timeout=30,
+    )
+    response.raise_for_status()
+    return response.json()
+
+
+animals_data = fetch_animals("fox")
+
 
 def render_card(animal):
     name = animal.get("name")
@@ -19,28 +30,31 @@ def render_card(animal):
     animal_type = characteristics.get("type")
 
     card = '<li class="cards__item">\n'
-    if name:
-        card += f'<div class="card__title">{name}</div>\n'
-    card += '<p class="card__text">\n'
+    card += f'  <div class="card__title">{name}</div>\n'
+    card += '  <p class="card__text">\n'
+
     if diet:
-        card += f'<strong>Diet:</strong> {diet}<br/>\n'
+        card += f'    <strong>Diet:</strong> {diet}<br/>\n'
     if location:
-        card += f'<strong>Location:</strong> {location}<br/>\n'
+        card += f'    <strong>Location:</strong> {location}<br/>\n'
     if animal_type:
-        card += f'<strong>Type:</strong> {animal_type}<br/>\n'
-    card += '</p></li>\n'
+        card += f'    <strong>Type:</strong> {animal_type}<br/>\n'
+
+    card += '  </p>\n'
+    card += '</li>\n'
     return card
 
-# HTML-String für die Tierkarten aufbauen
 
 output = ""
 for animal in animals_data:
     output += render_card(animal)
 
-with open("animals_template.html", "r", encoding="utf-8") as f:
-    template = f.read()
+with open("animals_template.html", "r", encoding="utf-8") as file:
+    html_template = file.read()
 
-updated_html = template.replace("{{ANIMAL_CARDS}}", output)
+html = html_template.replace("{{ANIMAL_CARDS}}", output)
 
-with open("animals.html", "w", encoding="utf-8") as f:
-    f.write(updated_html)
+with open("animals.html", "w", encoding="utf-8") as file:
+    file.write(html)
+
+print("Website was successfully generated to the file animals.html.")
