@@ -1,13 +1,17 @@
 # Zootopia - Codio Git Aufgabe
 # Alexander Bormann
 
+import os
 import requests
 
 API_URL = "https://api.api-ninjas.com/v1/animals"
-API_KEY = "ciBBT43nMOeo5QDAnJeFo91mLNeReqlVSvtsAblX"
+API_KEY = os.getenv("API_NINJAS_KEY")
 
 
 def fetch_animals(animal_name):
+    if not API_KEY:
+        raise RuntimeError("Missing API_NINJAS_KEY environment variable.")
+
     response = requests.get(
         API_URL,
         headers={"X-Api-Key": API_KEY},
@@ -16,9 +20,6 @@ def fetch_animals(animal_name):
     )
     response.raise_for_status()
     return response.json()
-
-
-animals_data = fetch_animals("fox")
 
 
 def render_card(animal):
@@ -30,7 +31,10 @@ def render_card(animal):
     animal_type = characteristics.get("type")
 
     card = '<li class="cards__item">\n'
-    card += f'  <div class="card__title">{name}</div>\n'
+
+    if name:
+        card += f'  <div class="card__title">{name}</div>\n'
+
     card += '  <p class="card__text">\n'
 
     if diet:
@@ -45,16 +49,36 @@ def render_card(animal):
     return card
 
 
-output = ""
-for animal in animals_data:
-    output += render_card(animal)
+def create_output(animals_data):
+    if not animals_data:
+        return (
+            '<li class="cards__item">\n'
+            '  <div class="card__title">No animals found</div>\n'
+            '  <p class="card__text">The API did not return any matching animals.</p>\n'
+            '</li>\n'
+        )
 
-with open("animals_template.html", "r", encoding="utf-8") as file:
-    html_template = file.read()
+    output = ""
+    for animal in animals_data:
+        output += render_card(animal)
+    return output
 
-html = html_template.replace("{{ANIMAL_CARDS}}", output)
 
-with open("animals.html", "w", encoding="utf-8") as file:
-    file.write(html)
+def main():
+    animal_name = input("Enter a name of an animal: ").strip()
+    animals_data = fetch_animals(animal_name)
+    output = create_output(animals_data)
 
-print("Website was successfully generated to the file animals.html.")
+    with open("animals_template.html", "r", encoding="utf-8") as file:
+        html_template = file.read()
+
+    html = html_template.replace("{{ANIMAL_CARDS}}", output)
+
+    with open("animals.html", "w", encoding="utf-8") as file:
+        file.write(html)
+
+    print("Website was successfully generated to the file animals.html.")
+
+
+if __name__ == "__main__":
+    main()
