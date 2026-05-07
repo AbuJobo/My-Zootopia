@@ -3,40 +3,77 @@
 import data_fetcher
 
 
+def render_info_item(label, value):
+    if not value:
+        return ""
+    return (
+        '<div class="info-item">'
+        f'<span class="info-label">{label}</span>'
+        f'<span class="info-value">{value}</span>'
+        '</div>'
+    )
+
+
 def render_card(animal):
     name = animal.get("name")
+    taxonomy = animal.get("taxonomy", {})
     characteristics = animal.get("characteristics", {})
-    diet = characteristics.get("diet")
+
+    scientific_name = taxonomy.get("scientific_name")
+    slogan = characteristics.get("slogan")
+
     locations = animal.get("locations", [])
     location = locations[0] if locations else None
+
     animal_type = characteristics.get("type")
+    diet = characteristics.get("diet")
+    lifespan = characteristics.get("lifespan")
+    weight = characteristics.get("weight")
+    length = characteristics.get("length")
 
-    card = '<li class="cards__item">\n'
+    left_column = ""
+    left_column += render_info_item("Primary Location", location)
+    left_column += render_info_item("Type", animal_type)
+    left_column += render_info_item("Diet", diet)
 
-    if name:
-        card += f'  <div class="card__title">{name}</div>\n'
+    right_column = ""
+    right_column += render_info_item("Length", length)
+    right_column += render_info_item("Weight", weight)
+    right_column += render_info_item("Lifespan", lifespan)
 
-    card += '  <p class="card__text">\n'
+    header = f'<h2 class="card-title">{name}'
+    if scientific_name:
+        header += f' <span class="scientific-name">({scientific_name})</span>'
+    header += '</h2>'
 
-    if diet:
-        card += f'    <strong>Diet:</strong> {diet}<br/>\n'
-    if location:
-        card += f'    <strong>Location:</strong> {location}<br/>\n'
-    if animal_type:
-        card += f'    <strong>Type:</strong> {animal_type}<br/>\n'
-
-    card += '  </p>\n'
-    card += '</li>\n'
+    card = '<div class="animal-card">\n'
+    card += '  <div class="card-header">\n'
+    card += f'    {header}\n'
+    if slogan:
+        card += f'    <div class="card-slogan">{slogan}</div>\n'
+    card += '  </div>\n'
+    card += '  <div class="card-body">\n'
+    card += f'    <div class="card-col">{left_column}</div>\n'
+    card += f'    <div class="card-col">{right_column}</div>\n'
+    card += '  </div>\n'
+    card += '</div>\n'
     return card
 
 
 def create_output(animals_data):
     if not animals_data:
         return (
-            '<li class="cards__item">\n'
-            '  <div class="card__title">No animals found</div>\n'
-            '  <p class="card__text">The API did not return any matching animals.</p>\n'
-            '</li>\n'
+            '<div class="animal-card">'
+            '<div class="card-header">'
+            '<h2 class="card-title">No animals found</h2>'
+            '</div>'
+            '<div class="card-body">'
+            '<div class="card-col">'
+            '<div class="info-item"><span class="info-value">The API did not return any matching animals.</span></div>'
+            '</div>'
+            '<div class="card-col"></div>'
+            '</div>'
+            '</div>'
         )
 
     output = ""

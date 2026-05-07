@@ -178,6 +178,10 @@ The website currently displays:
 - `characteristics.diet`
 - `characteristics.type`
 - the **first item only** from the `locations` array
+with the latest update also:
+- scientific name behind the name
+- fun facts as under title
+- length, weight, lifespan subject oto availability.
 
 ### Important note about locations
 
@@ -190,7 +194,7 @@ location = locations if locations else None
 
 This means:
 
-- if multiple locations are returned, only the first one is shown
+- if multiple locations are returned, only the first one is shown as primary location.
 - the remaining locations are currently ignored
 - the full API response contains more information than the website currently displays
 
@@ -214,10 +218,13 @@ python-dotenv
 Contributions are welcome.  
 You can improve the project by:
 
-- displaying more fields from the API
-- showing all available locations instead of only the first one
-- improving the website layout
+- UI and displaying even more or other fields from the API
+- showing all available locations instead of only the first one as primary
+- improving the website layout according the EU Guidelines on nobarriers.
 - adding better error handling
+- externalyse javascript
+- launch the website 
+- make it multilingual
 
 ## License
 

@@ -1,15 +1,60 @@
 <!DOCTYPE html>
-<html lang="en">
-    <head>
-         <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>My Animal Repository</title>
-        <link rel="stylesheet" href="style.css" />
-    </head>
-    <body>
-        <h1>My Animal Repository</h1>
-        <ul class="cards">
-        {{ANIMAL_CARDS}}
-        </ul>
-    </body>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Zootopia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,400&family=Work+Sans:wght@300..700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="site-logo">
+      <svg class="logo-mark" width="36" height="36" viewBox="0 0 36 36" fill="none" aria-label="Zootopia Logo">
+        <circle cx="18" cy="18" r="15" stroke="currentColor" stroke-width="2"/>
+        <ellipse cx="18" cy="14" rx="5" ry="6" fill="currentColor" opacity="0.15"/>
+        <path d="M11 22 Q18 30 25 22" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/>
+        <circle cx="13" cy="12" r="2.5" fill="currentColor" opacity="0.7"/>
+        <circle cx="23" cy="12" r="2.5" fill="currentColor" opacity="0.7"/>
+        <path d="M9 9 L13 14 M27 9 L23 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+      <div>
+        <div class="site-title">Zootopia</div>
+        <div class="site-subtitle">Animal Encyclopedia</div>
+      </div>
+    </div>
+
+    <button class="theme-toggle" data-theme-toggle aria-label="Switch to dark mode">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+      </svg>
+    </button>
+  </header>
+
+  <main class="main-content">
+    <div class="card-grid">
+      {{ANIMAL_CARDS}}
+    </div>
+  </main>
+
+  <script>
+    (function () {
+      const t = document.querySelector('[data-theme-toggle]');
+      const r = document.documentElement;
+      let d = matchMedia('(prefers-color-scheme:dark)').matches ? 'dark' : 'light';
+      r.setAttribute('data-theme', d);
+
+      t && t.addEventListener('click', () => {
+        d = d === 'dark' ? 'light' : 'dark';
+        r.setAttribute('data-theme', d);
+        t.setAttribute('aria-label', 'Switch to ' + (d === 'dark' ? 'light' : 'dark') + ' mode');
+        t.innerHTML = d === 'dark'
+          ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>'
+          : '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
+      });
+    })();
+  </script>
+</body>
 </html>
