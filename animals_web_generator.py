@@ -1,25 +1,6 @@
 # Zootopia - Codio Git Aufgabe
 # Alexander Bormann
-
-import os
-import requests
-
-API_URL = "https://api.api-ninjas.com/v1/animals"
-API_KEY = os.getenv("API_NINJAS_KEY")
-
-
-def fetch_animals(animal_name):
-    if not API_KEY:
-        raise RuntimeError("Missing API_NINJAS_KEY environment variable.")
-
-    response = requests.get(
-        API_URL,
-        headers={"X-Api-Key": API_KEY},
-        params={"name": animal_name},
-        timeout=30,
-    )
-    response.raise_for_status()
-    return response.json()
+import data_fetcher
 
 
 def render_card(animal):
@@ -65,9 +46,9 @@ def create_output(animals_data):
 
 
 def main():
-    animal_name = input("Enter a name of an animal: ").strip()
-    animals_data = fetch_animals(animal_name)
-    output = create_output(animals_data)
+    animal_name = input("Please enter an animal: ").strip()
+    data = data_fetcher.fetch_data(animal_name)
+    output = create_output(data)
 
     with open("animals_template.html", "r", encoding="utf-8") as file:
         html_template = file.read()
